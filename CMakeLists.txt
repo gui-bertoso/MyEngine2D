@@ -3,13 +3,17 @@ project(untitled1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-#Search a SDL2
+#Find a SDL2
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-#Search OpenGL
+#Find OpenGL
 find_package(OpenGl REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
+
+#Find Glew
+find_package(GLEW REQUIRED)
+include_directories(${GLEW_INCLUDE_DIRS+})
 
 #Add a executable
 add_executable(untitled1 scr/main.cpp)
