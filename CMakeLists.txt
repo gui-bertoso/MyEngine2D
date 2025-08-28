@@ -19,4 +19,4 @@ include_directories(${GLEW_INCLUDE_DIRS+})
 add_executable(untitled1 scr/main.cpp)
 
 #Makes a link to libraries
-target_link_libraries(engine ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} GLEW)
+target_link_libraries(engine ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
