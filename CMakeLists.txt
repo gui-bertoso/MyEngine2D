@@ -15,16 +15,11 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS+})
 
+#Set include folder
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
 #Add a executable
 add_executable(MyEngine2D main.cpp
-        include/ECS/Entity.h
-        include/ECS/Component.h
-        include/ECS/System.h
-        include/Core/Application.h
-        include/Core/Window.h
-        include/Core/Time.h
-        include/Renderer/Renderer.h
-        include/Renderer/Texture.h
         src/Core/Time.cpp
         src/Core/Window.cpp
         src/ECS/Component.cpp
