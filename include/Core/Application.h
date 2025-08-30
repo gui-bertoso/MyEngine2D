@@ -3,21 +3,16 @@
 //
 #pragma once
 
-#ifdef ENGINE_APPLICATION_H
-#define ENGINE_APPLICATION_H
-
-void Engine() {
+namespace Engine {
     class Application {
     public:
-        Application();
-        void run();
-        void quit();
+        Application(); // Constructor??
+        void run(); // Main loop
+        void quit(); // Stop a loop here
     private:
-        bool isRunning;
-        void processInput();
-        void update();
-        void render();
+        bool isRunning; // Game state
+        void processInput(); // Processes input
+        void update(float deltaTime); // Updates / game logic
+        void render(); // Renderization
     };
 }
-
-#endif
