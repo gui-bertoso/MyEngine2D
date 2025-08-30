@@ -20,8 +20,10 @@ namespace Engine {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) { // Equal pygame event logics
-                quit();
+            switch (event.type) {
+                case SDL_QUIT: quit(); break;
+                case SDL_KEYDOWN: if (event.key.keysym.sym == SDLK_ESCAPE) quit(); else std::cout << "Key pressed [" << event.key.keysym.sym << "]" << std::endl; break;
+                case SDL_KEYUP: std::cout << "Key released [" << event.key.keysym.sym << "]" << std::endl; break;
             }
         }
     }
@@ -35,7 +37,10 @@ namespace Engine {
         SDL_SetRenderDrawColor(renderer, 0, 100, 255, 255);
         SDL_RenderClear(renderer);
 
-        // Draw some itens here (sprites, forms, etc), before SDL Render Present line
+        // A simple red rect is renderer here
+        SDL_Rect rect = {350, 250, 100, 100};
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rect);
 
         SDL_RenderPresent(renderer); // Type a pygame.window update/flip
     }
