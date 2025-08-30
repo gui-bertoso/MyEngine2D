@@ -3,12 +3,14 @@
 //
 #pragma once
 #include <SDL2/SDL.h>
+#include "Renderer/Texture.h"
 
 namespace Engine {
     class Application {
     public:
         Application(); // Constructor??
         ~Application();
+
         void run(); // Main loop
         void quit(); // Stop a loop here
     private:
@@ -19,5 +21,9 @@ namespace Engine {
 
         SDL_Window* window;
         SDL_Renderer* renderer;
+        Texture* playerTexture;
+
+        float playerX;
+        float playerY;
     };
 }

@@ -3,16 +3,24 @@
 //
 
 #include "Core/Application.h"
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <chrono>
 #include <thread>
 
 namespace Engine {
-    Application::Application() : isRunning(true), window(nullptr), renderer(nullptr) {}
+    Application::Application()
+        : isRunning(true),
+        window(nullptr),
+        renderer(nullptr),
+        playerTexture(nullptr),
+        playerX(350), playerY(250) {}
 
     Application::~Application() {
+        if (playerTexture) delete playerTexture;
         if (renderer) SDL_DestroyRenderer(renderer);
         if (window) SDL_DestroyWindow(window);
+        IMG_Quit();
         SDL_Quit();
     }
 
@@ -22,8 +30,18 @@ namespace Engine {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT: quit(); break;
-                case SDL_KEYDOWN: if (event.key.keysym.sym == SDLK_ESCAPE) quit(); else std::cout << "Key pressed [" << event.key.keysym.sym << "]" << std::endl; break;
-                case SDL_KEYUP: std::cout << "Key released [" << event.key.keysym.sym << "]" << std::endl; break;
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.sym == SDLK_ESCAPE)
+                        quit();
+                    else if (event.key.keysym.sym == SDLK_LEFT)
+                        playerX -= 10;
+                    else if (event.key.keysym.sym == SDLK_RIGHT)
+                        playerX += 10;
+                    else if (event.key.keysym.sym == SDLK_UP)
+                        playerY -= 10;
+                    else if (event.key.keysym.sym == SDLK_DOWN)
+                        playerY += 10;
+                    break;
             }
         }
     }
@@ -37,10 +55,8 @@ namespace Engine {
         SDL_SetRenderDrawColor(renderer, 0, 100, 255, 255);
         SDL_RenderClear(renderer);
 
-        // A simple red rect is renderer here
-        SDL_Rect rect = {350, 250, 100, 100};
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
+        if (playerTexture)
+            playerTexture->render(static_cast<int>(playerX), static_cast<int>(playerY));
 
         SDL_RenderPresent(renderer); // Type a pygame.window update/flip
     }
@@ -48,6 +64,10 @@ namespace Engine {
     void Application::run() {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             std::cerr << "SDL could not initialized [SDL_ERROR:" << SDL_GetError() << "]" << std::endl;
+            return;
+        }
+        if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+            std::cerr << "SDL could not initialized [IMG_ERROR:" << IMG_GetError() << "]" << std::endl;
             return;
         }
 
@@ -65,7 +85,15 @@ namespace Engine {
         }
 
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (!renderer) {
+            std::cout << "Renderer could not be created [SDL_ERROR:" << SDL_GetError() << "]" << std::endl;
+            return;
+        }
 
+        playerTexture = new Texture(renderer);
+        if (!playerTexture->loadFromFile("assets/player.png")) {
+            std::cerr << "Failed to load player texture" << std::endl;
+        }
 
         using clock = std::chrono::high_resolution_clock;
         auto lastTime = clock::now();
