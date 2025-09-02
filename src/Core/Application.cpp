@@ -3,7 +3,7 @@
 //
 
 #include "Core/Application.h"
-#include <SDL2/SDL_image.h>
+#include <SDL3/SDL.h>
 #include <iostream>
 #include <chrono>
 #include <thread>

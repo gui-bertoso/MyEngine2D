@@ -2,7 +2,7 @@
 // Created by gbertoso on 2025-08-29.
 //
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include "Renderer/Texture.h"
 
 namespace Engine {

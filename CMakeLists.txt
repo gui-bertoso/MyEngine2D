@@ -3,27 +3,31 @@ project(MyEngine2D)
 
 set(CMAKE_CXX_STANDARD 20)
 
-#Find a SDL2
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+#Find a SDL3
+set(SDL2_DIR "${CMAKE_SOURCE_DIR}/packages/SDL3")
+include_directories(${SDL2_DIR}/include)
+link_directories(${SDL2_DIR}/lib)
 
-#Find a SDL2_image
-find_package(SDL2_image REQUIRED)
-include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+#Find a SDL3_image
+set(SDL3_IMAGE_DIR "${CMAKE_SOURCE_DIR}/packages/SD3_image")
+include_directories(${SDL3_IMAGE_DIR}/include)
+link_directories(${SDL3_IMAGE_DIR}/lib)
 
 #Find OpenGL
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 
 #Find Glew
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
+set(GLEW_DIR "${CMAKE_SOURCE_DIR}/packages/GLEW")
+include_directories(${GLEW_DIR}/include)
+link_directories(${GLEW_DIR}/lib)
 
 #Set include folder
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 #Add a executable
-add_executable(MyEngine2D main.cpp
+add_executable(MyEngine2D
+        main.cpp
         src/Core/Time.cpp
         src/Core/Window.cpp
         src/ECS/Component.cpp
@@ -31,12 +35,15 @@ add_executable(MyEngine2D main.cpp
         src/ECS/System.cpp
         src/Renderer/Renderer.cpp
         src/Renderer/Texture.cpp
-        src/Core/Application.cpp)
+        src/Core/Application.cpp
+)
 
 #Makes a link to libraries
 target_link_libraries(MyEngine2D
-        ${SDL2_LIBRARIES}
-        /usr/lib64/libSDL2_image.so
+        mingw32
+        SDL2
+        SDL2_image
         ${GLEW_LIBRARIES}
         ${OPENGL_LIBRARIES}
+        glew32
 )
